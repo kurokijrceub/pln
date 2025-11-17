@@ -1,0 +1,196 @@
+/* Animações e estilos customizados */
+.chat-message {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.loading-dots {
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0%, 20% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+.markdown-content {
+    line-height: 1.6;
+}
+
+.markdown-content h1, .markdown-content h2, .markdown-content h3 {
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.markdown-content p {
+    margin-bottom: 1rem;
+}
+
+.markdown-content code {
+    background-color: #f3f4f6;
+    padding: 0.125rem 0.25rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+}
+
+.markdown-content pre {
+    background-color: #1f2937;
+    color: #f9fafb;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+    margin: 1rem 0;
+}
+
+/* CLASSES ESSENCIAIS PARA NAVEGAÇÃO */
+.hidden {
+    display: none !important;
+}
+
+.content-section {
+    display: block;
+    width: 100%;
+    min-height: 400px;
+}
+
+.content-section.hidden {
+    display: none !important;
+}
+
+/* Correção do layout da sidebar */
+.sidebar {
+    position: relative;
+    z-index: 10;
+}
+
+/* Correção do posicionamento do status indicator */
+#status-indicator {
+    position: relative !important;
+    margin: 1rem;
+    z-index: 5;
+}
+
+/* Estilos para o menu lateral */
+.sidebar-item {
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.sidebar-item:hover {
+    background-color: #f3f4f6;
+}
+
+.sidebar-item.active {
+    background-color: #dbeafe;
+    color: #1d4ed8;
+    border-right: 3px solid #1d4ed8;
+}
+
+/* Layout responsivo */
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+        position: fixed;
+        z-index: 50;
+        transition: transform 0.3s ease;
+    }
+    
+    .sidebar.open {
+        transform: translateX(0);
+    }
+    
+    .main-content {
+        margin-left: 0;
+    }
+    
+    .mobile-menu-toggle {
+        display: block;
+    }
+    
+    .sidebar-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 40;
+    }
+    
+    .sidebar-overlay.open {
+        display: block;
+    }
+}
+
+/* Esconder toggle mobile em desktop */
+.mobile-menu-toggle {
+    display: none;
+}
+
+/* Estilos para upload de arquivo */
+.upload-zone-active {
+    border-color: #3b82f6 !important;
+    background-color: #eff6ff !important;
+}
+
+.file-preview-enter {
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Estilos para drag and drop */
+.upload-zone.dragover {
+    border-color: #3b82f6 !important;
+    background-color: #eff6ff !important;
+    transform: scale(1.02);
+}
+
+.upload-zone.dragover .upload-placeholder {
+    transform: scale(1.05);
+}
+
+/* Animação de hover para elementos decorativos */
+.upload-zone:hover .absolute.opacity-5 > div {
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-5px); }
+}
+
+/* Estilo para o botão de seleção de arquivo */
+.file-input-label {
+    transition: all 0.2s ease;
+}
+
+.file-input-label:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+/* Debug styles - remover em produção */
+.content-section {
+    border: 2px solid transparent;
+}
+
+.content-section:not(.hidden) {
+    border-color: #10b981;
+}

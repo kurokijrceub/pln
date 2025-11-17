@@ -1,0 +1,25 @@
+<!-- Cabeçalho -->
+<header class="bg-white shadow-sm border-b border-gray-200 px-6 py-4">
+    <div class="flex justify-between items-center">
+        <!-- Mobile menu toggle -->
+        <button id="mobile-menu-toggle" class="mobile-menu-toggle lg:hidden p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+        
+        <div>
+            <h2 id="page-title" class="text-xl font-semibold text-gray-900">{{ page_title | default('Upload de Documento') }}</h2>
+            <p id="page-subtitle" class="text-sm text-gray-600">{{ page_subtitle | default('Faça upload de documentos para processamento') }}</p>
+        </div>
+        
+        <!-- Status de Vetorização -->
+        <div class="flex items-center space-x-2">
+            <span class="text-sm font-medium text-gray-700">Status:</span>
+            <div id="vectorization-status" class="text-sm text-gray-600">
+                <div class="flex items-center space-x-2">
+                    <div class="w-2 h-2 bg-gray-400 rounded-full"></div>
+                    <span>Aguardando...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

@@ -1,0 +1,46 @@
+<!-- Menu Lateral Fixo -->
+<aside class="sidebar w-64 bg-white shadow-lg border-r border-gray-200 flex-shrink-0">
+    <!-- Logo/Header do Sidebar -->
+    <div class="p-6 border-b border-gray-200">
+        <h1 class="text-xl font-semibold text-gray-900">
+            RAG-Demo
+        </h1>
+        <p class="text-sm text-gray-600 mt-1">Ambiente Educacional</p>
+    </div>
+    
+    <!-- Menu de Navegação -->
+    <nav class="p-4 space-y-2">
+        <button id="upload-nav" class="sidebar-item active w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left">
+            <i data-lucide="upload" class="w-5 h-5"></i>
+            <span>Upload</span>
+        </button>
+        
+        <button id="collections-nav" class="sidebar-item w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left">
+            <i data-lucide="folder-open" class="w-5 h-5"></i>
+            <span>Collections</span>
+        </button>
+        
+        <button id="editor-nav" class="sidebar-item w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left">
+            <i data-lucide="edit-3" class="w-5 h-5"></i>
+            <span>Editor</span>
+        </button>
+        
+        <button id="chat-nav" class="sidebar-item w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left">
+            <i data-lucide="message-circle" class="w-5 h-5"></i>
+            <span>Chat</span>
+        </button>
+        
+        <button id="history-nav" class="sidebar-item w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left">
+            <i data-lucide="clock" class="w-5 h-5"></i>
+            <span>Histórico</span>
+        </button>
+    </nav>
+    
+    <!-- Status de Conexão -->
+    <div class="absolute bottom-4 left-4 right-4">
+        <div id="status-indicator" class="flex items-center space-x-2 p-3 bg-gray-50 rounded-lg">
+            <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+            <span class="text-sm text-gray-600">Conectado</span>
+        </div>
+    </div>
+</aside>

@@ -1,0 +1,44 @@
+# Flask e extensões
+Flask==3.0.0
+Flask-CORS==4.0.0
+Flask-SocketIO==5.3.6
+python-socketio==5.10.0
+python-engineio==4.8.0
+
+# LangChain e LLMs
+langchain
+langchain-openai
+langchain-community
+langchain-core
+langchain-text-splitters
+
+# Processamento de documentos
+PyPDF2==3.0.1
+pypdf==3.17.4
+python-docx==1.1.0
+docx2txt==0.8  # Necessário para Docx2txtLoader
+python-dotenv==1.0.1
+unstructured==0.18.9
+markdown==3.5.2
+langchain-google-genai==1.0.1
+
+# Vector Database - Qdrant (versões compatíveis)
+qdrant-client>=1.9.0
+langchain-qdrant==0.1.0
+
+# Storage
+minio==7.2.0
+
+# Database - PostgreSQL
+psycopg2-binary==2.9.9
+
+# Utilitários
+requests==2.31.0
+Werkzeug==3.0.1
+
+# Desenvolvimento e testes
+pytest==7.4.3
+pytest-cov==4.1.0
+black==23.11.0
+isort==5.12.0
+flake8==6.1.0 
