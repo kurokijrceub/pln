@@ -3278,32 +3278,17 @@ DOCUMENTO:
                     }
                 }
                 
-                // Obter modelos e collections selecionados (mesmo formato de produção)
+                // Organizar collections por modelo (mesmo formato de produção).
+                // O agrupamento usa o data-model do checkbox (que vem do provider da
+                // collection), e não o nome dela — nomes raramente contêm "openai"/"gemini".
                 const selectedModels = getSelectedSemanticModels();
-                const selectedCollections = getSelectedSemanticCollections();
-                
-                // Organizar collections por modelo (mesmo formato de produção)
                 const organizedModels = {};
-                
-                if (selectedModels.includes('openai')) {
-                    const openaiCollections = selectedCollections.filter(col => 
-                        col.includes('openai') || col.includes('OpenAI')
-                    );
-                    organizedModels.openai = {
-                        enabled: true,
-                        collections: openaiCollections
-                    };
-                }
-                
-                if (selectedModels.includes('gemini')) {
-                    const geminiCollections = selectedCollections.filter(col => 
-                        col.includes('gemini') || col.includes('Gemini')
-                    );
-                    organizedModels.gemini = {
-                        enabled: true,
-                        collections: geminiCollections
-                    };
-                }
+                selectedModels.forEach(modelId => {
+                    const collections = Array.from(
+                        document.querySelectorAll(`input.collection-checkbox[data-model="${modelId}"]:checked`)
+                    ).map(cb => cb.value);
+                    organizedModels[modelId] = { enabled: true, collections };
+                });
                 
                 // Payload no mesmo formato de produção
                 const payload = {
@@ -3323,12 +3308,33 @@ DOCUMENTO:
                 });
                 
                 if (response.ok) {
-                    const result = await response.json();
-                    
-                    // Processar resposta no mesmo formato de produção
-                    if (result.openai_response || result.gemini_response) {
-                        // Exibir respostas lado a lado como no modo normal
-                        displaySemanticResults(result);
+                    const rawText = await response.text();
+                    let result;
+                    try {
+                        result = JSON.parse(rawText);
+                    } catch (e) {
+                        addSemanticMessage('error', `❌ Webhook de teste respondeu ${response.status} sem JSON válido. Corpo recebido: "${rawText.slice(0, 300) || '(vazio)'}". Verifique se o workflow chegou ao nó "Respond to Webhook".`);
+                        return;
+                    }
+
+                    // Normalizar resposta como o backend faz (semantic_search_service.search_with_n8n)
+                    if (Array.isArray(result)) result = result[0] || {};
+                    const body = (result && typeof result === 'object' && 'output' in result) ? result.output : result;
+                    const asText = v => (v && typeof v === 'object')
+                        ? (v.response ?? v.content ?? v.text ?? JSON.stringify(v))
+                        : v;
+                    const responses = {};
+                    if (typeof body === 'string') {
+                        // Saída padrão do AI Agent: {"output": "<texto>"}
+                        responses[organizedModels.openai ? 'openai' : 'gemini'] = body;
+                    } else {
+                        ['openai', 'gemini'].forEach(m => {
+                            const v = body?.responses?.[m] ?? body?.[`${m}_response`];
+                            if (v != null && organizedModels[m]) responses[m] = String(asText(v));
+                        });
+                    }
+                    if (Object.keys(responses).length) {
+                        displaySemanticResults(responses);
                     } else {
                         // Fallback para resposta simples
                         addSemanticMessage('assistant', `✅ Webhook de teste respondeu: ${JSON.stringify(result, null, 2)}`);

@@ -129,10 +129,32 @@ class SemanticSearchService:
             )
             
             if response.status_code == 200:
-                n8n_result = response.json()
+                try:
+                    n8n_result = response.json()
+                except ValueError:
+                    return {
+                        'success': False,
+                        'error': 'N8N respondeu sem JSON válido. Verifique o nó "Respond to Webhook".',
+                        'response_text': response.text[:500]
+                    }
+
+                # "Respond to Webhook" com "All Incoming Items" devolve uma lista
+                if isinstance(n8n_result, list):
+                    n8n_result = n8n_result[0] if n8n_result else {}
 
                 # Normalizar estrutura: alguns fluxos retornam sob 'output', outros no root
-                payload = n8n_result.get('output', n8n_result)
+                payload = n8n_result.get('output', n8n_result) if isinstance(n8n_result, dict) else n8n_result
+
+                # Saída padrão do AI Agent: {"output": "<texto>"} — uma resposta única do
+                # orquestrador, atribuída ao primeiro modelo habilitado.
+                if not isinstance(payload, dict):
+                    target = 'openai' if openai_enabled else 'gemini'
+                    return {
+                        'success': True,
+                        'responses': {target: str(payload)},
+                        'n8n_workflow_id': None,
+                        'processing_time': None
+                    }
 
                 # Função utilitária para extrair string de diferentes formatos
                 def _as_text(value):
