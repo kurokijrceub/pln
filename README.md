@@ -51,6 +51,17 @@ O RAG-Demo é uma plataforma voltada para alunos da disciplina de **Processament
 - **Containers**: Docker Compose para orquestração completa
 - **GLiNER/BERTimbau** (padrão, desativável): container `gliner-bert` com PyTorch CPU (`GLINER_BERT=true` em `env.example`)
 
+### 📚 Documentação técnica
+
+- [Índice da documentação](docs/README.md)
+- [Arquitetura e fluxos](docs/arquitetura.md)
+- [Referência da API](docs/api.md)
+- [Guia de desenvolvimento](docs/desenvolvimento.md)
+- [Busca por similaridade](docs/busca-por-similaridade.md)
+- [Busca híbrida](docs/busca-hibrida.md)
+- [Entidades com TF-IDF e NER](docs/entidades-tfidf-ner.md)
+- [GLiNER e BERTimbau](docs/gliner-bertimbau.md)
+
 ## 🚀 Instalação e Configuração
 
 Guia pensado para alunos **sem experiência prévia com Docker**. Siga os passos na ordem. Se algo falhar, use a seção [Troubleshooting](#troubleshooting) no final deste README.
@@ -461,7 +472,7 @@ No pgAdmin (http://localhost:5050), use o host **`postgres`** (rede Docker), nã
 
 ### 1. 📤 Upload de Documentos
 
-- **Formatos suportados**: PDF, DOCX, TXT, MD (até 10MB)
+- **Formatos suportados**: TXT, PDF, DOC, DOCX, MD, RTF e JSON (até 20 MB)
 - **Processamento automático**: LLM melhora formatação e estrutura
 - **Vetorização**: Conversão para embeddings via OpenAI ou Google Gemini
 - **Armazenamento**: Documentos em disco local (ou MinIO, se habilitado), vetores no Qdrant
@@ -1421,7 +1432,7 @@ Ou via script:
 
 ## 📄 Licença
 
-Este projeto está sob a **MIT License** - veja [LICENSE](LICENSE) para detalhes.
+Este projeto está sob a **MIT License**.
 
 ## 🙏 Agradecimentos
 

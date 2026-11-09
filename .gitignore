@@ -239,4 +239,5 @@ Desktop.ini
 .cursor/
 
 # Docs
-docs/
+docs/*
+!docs/*.md
