@@ -1701,7 +1701,8 @@ def semantic_search():
                         elif response_data and isinstance(response_data, str):
                             # Caso a resposta seja apenas uma string
                             formatted_response = f"**{model_name.upper()} Response:**\n{response_data}"
-                            session_service.add_message(session_id, 'assistant', formatted_response)
+                            session_service.add_message(session_id, 'assistant', formatted_response,
+                                                        sources=result.get('sources', []))
                             
             except Exception as save_error:
                 # Log do erro, mas não interrompe o fluxo

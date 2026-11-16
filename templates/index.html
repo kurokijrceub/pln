@@ -3334,7 +3334,7 @@ DOCUMENTO:
                         });
                     }
                     if (Object.keys(responses).length) {
-                        displaySemanticResults(responses);
+                        displaySemanticResults(responses, Array.isArray(body?.sources) ? body.sources : []);
                     } else {
                         // Fallback para resposta simples
                         addSemanticMessage('assistant', `✅ Webhook de teste respondeu: ${JSON.stringify(result, null, 2)}`);
@@ -3468,7 +3468,7 @@ DOCUMENTO:
                 if (toRemove) toRemove.remove();
                 if (result.success) {
                     // Exibir respostas lado a lado
-                    displaySemanticResults(result.responses);
+                    displaySemanticResults(result.responses, result.sources || []);
                 } else {
                     addSemanticMessage('error', `Erro: ${result.error}`);
                 }
@@ -3546,7 +3546,17 @@ DOCUMENTO:
             }
         }
         
-        function addSemanticMessage(role, content) {
+        function addSemanticMessage(role, content, options = {}) {
+            // Resposta recarregada do histórico: o backend salva "**OPENAI Response:**\n<texto>".
+            // Reaproveita o cartão da resposta ao vivo (markdown + lista de fontes).
+            if (role === 'assistant' && options.fromHistory) {
+                const match = /^\*\*(OPENAI|GEMINI) Response:\*\*\n?([\s\S]*)$/i.exec(content || '');
+                if (match) {
+                    displaySemanticResults({ [match[1].toLowerCase()]: match[2] }, options.sources || []);
+                    return;
+                }
+            }
+
             const messageDiv = document.createElement('div');
             messageDiv.className = 'chat-message mb-4';
             
@@ -3605,7 +3615,28 @@ DOCUMENTO:
             semanticMessages.scrollTop = semanticMessages.scrollHeight;
         }
         
-        function displaySemanticResults(responses) {
+        // Lista os chunks que subsidiaram a resposta; [n] no texto = ref n
+        function renderSemanticSources(sources) {
+            if (!Array.isArray(sources) || sources.length === 0) return '';
+            const items = sources.map(s => `
+                <li class="flex items-baseline gap-2">
+                    <span class="font-semibold text-gray-700">[${escapeHtml(String(s.ref ?? ''))}]</span>
+                    <span>
+                        <span class="text-gray-800">${escapeHtml(s.arquivo || '?')}</span>
+                        <span class="text-gray-500">· trecho ${escapeHtml(String(s.chunk_index ?? '?'))}</span>
+                        <span class="text-gray-500">· coleção <strong class="font-medium text-gray-700">${escapeHtml(s.collection || '?')}</strong></span>
+                        <span class="text-gray-500">· chunk_id <code class="text-[11px]">${escapeHtml(s.chunk_id || '')}</code></span>
+                    </span>
+                </li>`).join('');
+            return `
+                <div class="mt-4 pt-3 border-t border-gray-100">
+                    <div class="text-xs font-semibold text-gray-600 mb-1">📎 Fontes</div>
+                    <ul class="text-xs space-y-1">${items}</ul>
+                </div>`;
+        }
+
+        function displaySemanticResults(responses, sources = []) {
+            const sourcesHtml = renderSemanticSources(sources);
             const resultsDiv = document.createElement('div');
             resultsDiv.className = 'chat-message mb-6';
             
@@ -3628,6 +3659,7 @@ DOCUMENTO:
                                     <div class="prose prose-sm max-w-none text-gray-700 leading-relaxed">
                                         ${marked.parse(responses.openai)}
                                     </div>
+                                    ${sourcesHtml}
                                 </div>
                             </div>
                         </div>
@@ -3652,6 +3684,7 @@ DOCUMENTO:
                                     <div class="prose prose-sm max-w-none text-gray-700 leading-relaxed">
                                         ${marked.parse(responses.gemini)}
                                     </div>
+                                    ${sourcesHtml}
                                 </div>
                             </div>
                         </div>

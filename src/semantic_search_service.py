@@ -187,9 +187,14 @@ class SemanticSearchService:
                 if gemini_enabled and 'gemini_response' in payload and 'gemini' not in responses:
                     responses['gemini'] = _as_text(payload['gemini_response'])
 
+                # Chunks que subsidiaram a resposta, já conferidos no Qdrant pelo fluxo
+                # do N8N: [{ref, chunk_id, arquivo, chunk_index, collection}]
+                sources = payload.get('sources')
+
                 return {
                     'success': bool(payload.get('success', True)),
                     'responses': responses,
+                    'sources': sources if isinstance(sources, list) else [],
                     'n8n_workflow_id': payload.get('workflow_id'),
                     'processing_time': payload.get('processing_time')
                 }
